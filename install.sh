@@ -109,7 +109,7 @@ cat <<EOF >> docroot/sites/default/settings.php
 \$settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
 
 EOF
-echo "----------You should probably run db updates because of D9. Run them? (y/n)----------"
+echo "----------Run db updates? (y/n)----------"
 read dba
 if [ $dba == 'Yes' ] || [ $dba == 'yes' ] || [ $dba == 'Y' ] || [ $dba == 'y' ]
 	then
