@@ -104,7 +104,7 @@ services:
 
 EOF
 echo "Appending your-site/docroot/sites/default/settings.php"
-cat <<EOF >> docroot/sites/default/settings.php
+cat <<EOF > docroot/sites/default/settings.php
 
 \$settings['container_yamls'][] = DRUPAL_ROOT . '/sites/development.services.yml';
 \$settings['cache']['bins']['render'] = 'cache.backend.null';
