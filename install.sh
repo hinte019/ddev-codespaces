@@ -122,4 +122,4 @@ ddev restart
 echo "----------Generating login link----------"
 ddev exec drush uli
 echo "----------Finished!----------"
-#set +x
+set +x
