@@ -1,6 +1,6 @@
 #!/bin/bash
 # use set x for verbose debug output. uncomment at top and bottom
-#set -x
+set -x
 echo "----------Since we can't store SSH keys, we will need to generate a personal access token----------"
 echo "----------Please go to https://github.umn.edu/settings/tokens and generate a toekn and paste below----------"
 read pat
