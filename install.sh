@@ -119,5 +119,5 @@ fi
 ddev restart
 echo "----------Generating login link----------"
 ddev exec drush uli
-echo "----------Finished! Please copy local settings in settings.php to settings.ddev.php for version control!----------"
+echo "----------Finished!----------"
 #set +x
