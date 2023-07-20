@@ -1,16 +1,28 @@
 #!/bin/bash
 # use set x for verbose debug output. uncomment at top and bottom
 set -x
-echo "----------Since we can't store SSH keys, we will need to generate a personal access token----------"
-echo "----------Please go to https://github.umn.edu/settings/tokens and generate a toekn and paste below----------"
-read pat
+echo "----------We will need to add an SSH key to codespaces unti I can figure out a better method----------"
+echo "----------What is your full UMN Email? Ex. urweb@umn.edu----------"
+read email
+echo "----------Genterating SSH key pair--------------"
+ssh-keygen -t ed25519 -C "$email" -f /home/codespace/.ssh/id_ed25519 -q -N ""
+echo "----------Start the SSH agent in the background--------------"
+eval "$(ssh-agent -s)"
+# Add your SSH private key to the SSH agent
+ssh-add /home/codespace/.ssh/id_ed25519
+# install xclip
+sudo apt-get install -y xclip
+# Copy the contents of the id_ed25519.pub file to your clipboard
+xclip -sel clip < /home/codespace/.ssh/id_ed25519.pub
+echo "----------Key has been copied to clipboard!--------------"
+echo "----------Please go to https://github.umn.edu/settings/ssh/new (CMD click on mac) and paste the key--------------"
 echo "----------What is the sitename? (folder name)----------"
 read sitename
 if [ -d "$sitename" ]
 	then
 		echo "Sitename directory already exists. Site must be installed"
 	else
-		git clone -b 9.x-prod https://$pat@github.umn.edu/drupalplatform/d8-composer.git $sitename
+		git clone -b 9.x-prod git@github.umn.edu:drupalplatform/d8-composer.git $sitename
 		cd $sitename
 		ddev config --project-type=php
 		ddev start
