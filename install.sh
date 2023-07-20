@@ -62,7 +62,7 @@ if [ $dba == 'Yes' ] || [ $dba == 'yes' ] || [ $dba == 'Y' ] || [ $dba == 'y' ]
 		sqlfile=$(find . -maxdepth 1 -name "*.sql" -print -quit)
 		
 		# check for the presence of .sql.tar.gz file
-		sqltarfile=$(find . -maxdepth 1 -name "*.sql.tar.gz" -print -quit)
+		sqltarfile=$(find . -maxdepth 1 -name "*.sql.gz" -print -quit)
 		
 		if [[ -n $sqlfile ]]; then
 		  # .sql file found, import it
