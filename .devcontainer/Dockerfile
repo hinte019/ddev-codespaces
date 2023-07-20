@@ -19,6 +19,8 @@ RUN apt-get update -yq \
     # Install NodeJS LTS
     && curl -sL https://deb.nodesource.com/setup_lts.x | bash \
     && apt-get install nodejs -yq \
+    # install xclip
+    && apt-get install xclip -y \
     # Install Composer
     && wget https://getcomposer.org/installer \
     && php installer --install-dir=/usr/local/bin --filename=composer \
