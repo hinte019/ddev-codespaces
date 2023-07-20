@@ -15,7 +15,7 @@ eval "$(ssh-agent -s)"
 # Add your SSH private key to the SSH agent
 ssh-add /home/drupal/.ssh/id_ed25519
 echo "----------Please go to https://github.umn.edu/settings/ssh/new (CMD click on mac) and paste the key and give a title--------------"
-cat ~/.ssh/id_rsa.pub
+cat ~/.ssh/id_ed25519.pub
 echo "----------Press Enter when done----------"
 read wait1
 echo "----------What is the sitename? (folder name)----------"
