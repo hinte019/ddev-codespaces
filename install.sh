@@ -14,10 +14,9 @@ echo "----------Start the SSH agent in the background--------------"
 eval "$(ssh-agent -s)"
 # Add your SSH private key to the SSH agent
 ssh-add /home/drupal/.ssh/id_ed25519
-echo "----------Please go to https://github.umn.edu/settings/ssh/new (CMD click on mac) and paste the key and give a title--------------"
+echo "----------Copy key below and go to https://github.umn.edu/settings/ssh/new (CMD click on mac) and paste the key and give it a title--------------"
 cat ~/.ssh/id_ed25519.pub
-echo "----------Press Enter when done----------"
-read -r wait1
+read -n 1 -r -s -p $'Press enter when done...\n'
 echo "----------What is the sitename? (folder name)----------"
 read -r sitename
 if [ -d "$sitename" ]
@@ -25,11 +24,11 @@ if [ -d "$sitename" ]
 		echo "Sitename directory already exists. Site must be installed"
 	else
 		git clone -b 9.x-prod git@github.umn.edu:drupalplatform/d8-composer.git "$sitename"
-		cd "$sitename"
+		cd "$sitename" || exit
 		composer install
-		cd docroot/sites/
+		cd docroot/sites/ || exit
 		echo "----------Please paste in the Default Folder git repo code (Code->SSH->Copy) copied from clipboard and hit enter----------"
-		read gitrepo
+		read -r gitrepo
 		if [ -d "default" ]
 			then
 				rm -rf default/
@@ -55,7 +54,7 @@ if [ -d "$sitename" ]
 		cd ..
   		# Copy settings local template
     		cp templates/settings.local.php.template "$sitename/docroot/sites/default/settings.local.php"
-      		cd "$sitename"
+      		cd "$sitename" || exit
 		# Replace placeholders with environment variables
 		sed -i 's/DATABASE_NAME/'"drupal"'/g' docroot/sites/default/settings.local.php
 		sed -i 's/DATABASE_USER/'"admin"'/g' docroot/sites/default/settings.local.php
@@ -91,9 +90,9 @@ echo "----------Do you have a DB? (y/n)----------"
 read -r dba
 if [ "$dba" == 'Yes' ] || [ "$dba" == 'yes' ] || [ "$dba" == 'Y' ] || [ "$dba" == 'y' ]
 	then
-		cd "$sitename"
+		cd "$sitename" || exit
 		echo "----------Please drag and drop the db into the new site folder and wait, then hit enter----------"
-		read -r wait2
+		read -rsn1
 		# check for the presence of .sql file
 		sqlfile=$(find . -maxdepth 1 -name "*.sql" -print -quit)
 		
@@ -126,11 +125,10 @@ elif  [ "$dba" == 'No' ] || [ "$dba" == 'no' ] || [ "$dba" == 'N' ] || [ "$dba" 
    		read -r loginpw
  		drush si lightning_umn --db-url="mysql://admin:$PW@localhost/drupal" --site-name='My Drupal Site' --account-name=admin --account-pass="$loginpw"
 		echo "----------Site install finished!----------"
-		read -r asdf
 else
 	echo "----------Error with input!----------"
 fi
-cd "$sitename"
+cd "$sitename" || exit
 echo "----------Configure stage proxy? (y/n)----------"
 read -r stageproxy
 if [ "$stageproxy" == 'Yes' ] || [ "$stageproxy" == 'yes' ] || [ "$stageproxy" == 'Y' ] || [ "$stageproxy" == 'y' ]
