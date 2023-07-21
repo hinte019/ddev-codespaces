@@ -42,6 +42,7 @@ if [ -d "$sitename" ]
 				mkdir default/files
 				mkdir default/files/sync
 		fi
+  		
 		cd ..
 		cd ..
 		# mkcert -install
@@ -49,6 +50,9 @@ if [ -d "$sitename" ]
     		PW=date +%s | sha256sum | base64 | head -c 32
   		# Create db
     		mysql -u admin -p $PW -e "CREATE DATABASE drupal;"
+      		# copy default.settings.php
+		cp docroot/core/assets/scaffold/files/default.settings.php docroot/sites/default/settings.php
+  		
 		cd ..
 fi
 echo "----------Do you have a DB? (y/n)----------"
@@ -127,6 +131,7 @@ drush cset -y system.file path.temporary /tmp
 drush -y config-set system.performance css.preprocess 0
 drush -y config-set system.performance js.preprocess 0
 echo "Overwriting your-site/docroot/sites/development.services.yml"
+# overwrite services using >
 cat <<EOF > docroot/sites/development.services.yml
 parameters:
   http.response.debug_cacheability_headers: true
@@ -140,11 +145,15 @@ services:
 
 EOF
 echo "Appending your-site/docroot/sites/default/settings.php"
-cat <<EOF > docroot/sites/default/settings.php
+# Append settings using >> and escape chars with \
+cat <<\EOF >> docroot/sites/default/settings.php
 
-\$settings['container_yamls'][] = DRUPAL_ROOT . '/sites/development.services.yml';
-\$settings['cache']['bins']['render'] = 'cache.backend.null';
-\$settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
+$settings['container_yamls'][] = DRUPAL_ROOT . '/sites/development.services.yml';
+$settings['cache']['bins']['render'] = 'cache.backend.null';
+$settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
+if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+  include $app_root . '/' . $site_path . '/settings.local.php';
+}
 
 EOF
 echo "----------Run db updates? (y/n)----------"
