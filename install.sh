@@ -52,8 +52,14 @@ if [ -d "$sitename" ]
     		mysql -u admin -p $PW -e "CREATE DATABASE drupal;"
       		# copy default.settings.php
 		cp docroot/core/assets/scaffold/files/default.settings.php docroot/sites/default/settings.php
-  		
 		cd ..
+  		# Copy settings local template
+    		cp templates/settings.local.php.template $sitename/docroot/sites/default/settings.local.php
+      		cd $sitename
+		# Replace placeholders with environment variables
+		sed -i 's/DATABASE_NAME/'"drupal"'/g' docroot/sites/default/settings.local.php
+		sed -i 's/DATABASE_USER/'"admin"'/g' docroot/sites/default/settings.local.php
+		sed -i 's/DATABASE_PASSWORD/'"$PW"'/g' docroot/sites/default/settings.local.php
 fi
 echo "----------Do you have a DB? (y/n)----------"
 read dba
