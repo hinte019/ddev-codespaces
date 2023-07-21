@@ -60,6 +60,32 @@ if [ -d "$sitename" ]
 		sed -i 's/DATABASE_NAME/'"drupal"'/g' docroot/sites/default/settings.local.php
 		sed -i 's/DATABASE_USER/'"admin"'/g' docroot/sites/default/settings.local.php
 		sed -i 's/DATABASE_PASSWORD/'"$PW"'/g' docroot/sites/default/settings.local.php
+  		echo "Overwriting your-site/docroot/sites/development.services.yml"
+		# overwrite services using >
+		cat <<EOF > docroot/sites/development.services.yml
+		parameters:
+		  http.response.debug_cacheability_headers: true
+		  twig.config:
+		    debug: true
+		    auto_reload: true
+		    cache: false
+		services:
+		  cache.backend.null:
+		    class: Drupal\Core\Cache\NullBackendFactory
+
+		EOF
+		echo "Appending your-site/docroot/sites/default/settings.php"
+		# Append settings using >> and escape chars with \
+		cat <<\EOF >> docroot/sites/default/settings.php
+		
+		$settings['container_yamls'][] = DRUPAL_ROOT . '/sites/development.services.yml';
+		$settings['cache']['bins']['render'] = 'cache.backend.null';
+		$settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
+		if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+		  include $app_root . '/' . $site_path . '/settings.local.php';
+		}
+  
+		EOF
 fi
 echo "----------Do you have a DB? (y/n)----------"
 read dba
@@ -136,32 +162,6 @@ echo "----------Configuring cache settings----------"
 drush cset -y system.file path.temporary /tmp
 drush -y config-set system.performance css.preprocess 0
 drush -y config-set system.performance js.preprocess 0
-echo "Overwriting your-site/docroot/sites/development.services.yml"
-# overwrite services using >
-cat <<EOF > docroot/sites/development.services.yml
-parameters:
-  http.response.debug_cacheability_headers: true
-  twig.config:
-    debug: true
-    auto_reload: true
-    cache: false
-services:
-  cache.backend.null:
-    class: Drupal\Core\Cache\NullBackendFactory
-
-EOF
-echo "Appending your-site/docroot/sites/default/settings.php"
-# Append settings using >> and escape chars with \
-cat <<\EOF >> docroot/sites/default/settings.php
-
-$settings['container_yamls'][] = DRUPAL_ROOT . '/sites/development.services.yml';
-$settings['cache']['bins']['render'] = 'cache.backend.null';
-$settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
-if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
-  include $app_root . '/' . $site_path . '/settings.local.php';
-}
-
-EOF
 echo "----------Run db updates? (y/n)----------"
 read dba
 if [ $dba == 'Yes' ] || [ $dba == 'yes' ] || [ $dba == 'Y' ] || [ $dba == 'y' ]
