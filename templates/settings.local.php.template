@@ -175,4 +175,5 @@ if (empty($settings['config_sync_directory'])) {
 
 // This will ensure the site can only be accessed through the intended host
 // names. Additional host patterns can be added for custom configurations.
-$settings['trusted_host_patterns'] = ['.*'];
+$settings['trusted_host_patterns'] = ['^.*\.github\.dev$'];
+
