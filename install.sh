@@ -85,6 +85,7 @@ if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
 }
 
 EOF
+		cd ..
 fi
 echo "----------Do you have a DB? (y/n)----------"
 read -r dba
@@ -121,10 +122,12 @@ if [ "$dba" == 'Yes' ] || [ "$dba" == 'yes' ] || [ "$dba" == 'Y' ] || [ "$dba" =
 		cd ..
 elif  [ "$dba" == 'No' ] || [ "$dba" == 'no' ] || [ "$dba" == 'N' ] || [ "$dba" == 'n' ]
 	then
+ 		cd "$sitename" || exit
  		echo "----------Please enter a password for the site. Username is admin----------"
    		read -r loginpw
  		drush si lightning_umn --db-url="mysql://admin:$PW@localhost/drupal" --site-name='My Drupal Site' --account-name=admin --account-pass="$loginpw"
 		echo "----------Site install finished!----------"
+  		cd ..
 else
 	echo "----------Error with input!----------"
 fi
