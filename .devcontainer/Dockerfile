@@ -22,6 +22,8 @@ RUN apt-get update -yq \
     # Install Composer
     && wget https://getcomposer.org/installer \
     && php installer --install-dir=/usr/local/bin --filename=composer \
+    # Install MariaDB client and server
+    && apt-get install mariadb-server mariadb-client -yq \
     # Install global Drush launcher
     && wget -O /usr/local/bin/drush https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar \
     && chmod +x /usr/local/bin/drush \
@@ -30,5 +32,6 @@ RUN apt-get update -yq \
     && rm -rf /var/lib/apt/lists/* \
     # Create a user
     && useradd -m drupal -p drupal
+RUN service mysql start
 USER drupal
 ENV SHELL /bin/bash
