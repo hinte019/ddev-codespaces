@@ -47,6 +47,11 @@ if [ -d "$sitename" ]
 		# mkcert -install
   		# Gen pw
     		PW=$(date +%s | sha256sum | base64 | head -c 32)
+      		# Start and configure mariaDB service
+		service mysql start
+		mysql -u root -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY '$PW';"
+		mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';"
+		mysql -u root -e "FLUSH PRIVILEGES;"
   		# Create db
     		mysql -u admin -p "$PW" -e "CREATE DATABASE drupal;"
       		# copy default.settings.php
