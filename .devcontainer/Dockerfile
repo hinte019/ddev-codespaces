@@ -32,6 +32,5 @@ RUN apt-get update -yq \
     && rm -rf /var/lib/apt/lists/* \
     # Create a user
     && useradd -m drupal -p drupal
-RUN service mysql start
 USER drupal
 ENV SHELL /bin/bash
