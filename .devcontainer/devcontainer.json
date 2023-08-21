@@ -46,5 +46,5 @@
         "php-docblocker.returnGap": true,
         "php-docblocker.useShortNames": true
     }
-	"postCreateCommand": "bash -c 'ddev config global --omit-containers=ddev-router && ddev config --auto && ddev debug download-images'"
+	"postCreateCommand": "bash -c 'ddev config global --omit-containers=ddev-router && ddev config --auto && ddev debug download-images'",
 }
