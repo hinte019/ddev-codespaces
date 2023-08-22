@@ -7,7 +7,7 @@ read -r email
 # Make ssh dir in home dir
 mkdir /home/codespace/.ssh
 echo "----------Genterating SSH key pair--------------"
-ssh-keygen -t ed25519 -C "$email" -f /home/drupal/.ssh/id_ed25519 -q -N ""
+ssh-keygen -t ed25519 -C "$email" -f /home/codespace/.ssh/id_ed25519 -q -N ""
 # Change permissions to private
 chmod 600 /home/codespace/.ssh/id_ed25519
 echo "----------Start the SSH agent in the background--------------"
