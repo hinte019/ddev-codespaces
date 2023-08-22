@@ -5,15 +5,15 @@ echo "----------We will need to add an SSH key to codespaces until I can figure 
 echo "----------What is your full UMN Email? Ex. urweb@umn.edu----------"
 read -r email
 # Make ssh dir in home dir
-mkdir /home/drupal/.ssh
+mkdir /home/codespace/.ssh
 echo "----------Genterating SSH key pair--------------"
 ssh-keygen -t ed25519 -C "$email" -f /home/drupal/.ssh/id_ed25519 -q -N ""
 # Change permissions to private
-chmod 600 /home/drupal/.ssh/id_ed25519
+chmod 600 /home/codespace/.ssh/id_ed25519
 echo "----------Start the SSH agent in the background--------------"
 eval "$(ssh-agent -s)"
 # Add your SSH private key to the SSH agent
-ssh-add /home/drupal/.ssh/id_ed25519
+ssh-add /home/codespace/.ssh/id_ed25519
 echo "----------Copy key below and go to https://github.umn.edu/settings/ssh/new (CMD click on mac) and paste the key and give it a title--------------"
 cat ~/.ssh/id_ed25519.pub
 read -n 1 -r -s -p $'Press enter when done...\n'
@@ -25,7 +25,7 @@ if [ -d "$sitename" ]
 	else
 		git clone -b 9.x-prod git@github.umn.edu:drupalplatform/d8-composer.git "$sitename"
 		cd "$sitename" || exit
-		composer install
+		ddev composer install
 		cd docroot/sites/ || exit
 		echo "----------Please paste in the Default Folder git repo code (Code->SSH->Copy) copied from clipboard and hit enter----------"
 		read -r gitrepo
