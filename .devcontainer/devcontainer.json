@@ -22,9 +22,6 @@
     }
   },
   "postCreateCommand": "bash -c 'ddev config global --omit-containers=ddev-router && ddev config --auto && ddev debug download-images'",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
   "extensions": [
     "mblode.twig-language-2",
     "bmewburn.vscode-intelephense-client",
