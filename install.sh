@@ -9,15 +9,15 @@ echo "----------We will need to add an SSH key to coder until I can figure out a
 echo "----------What is your full UMN Email? Ex. urweb@umn.edu----------"
 read -r email
 # Make ssh dir in home dir
-mkdir /home/coder/.ssh
+mkdir /home/codespaces/.ssh
 echo "----------Genterating SSH key pair--------------"
-ssh-keygen -t ed25519 -C "$email" -f /home/coder/.ssh/id_ed25519 -q -N ""
+ssh-keygen -t ed25519 -C "$email" -f /home/codespaces/.ssh/id_ed25519 -q -N ""
 # Change permissions to private
-chmod 600 /home/coder/.ssh/id_ed25519
+chmod 600 /home/codespaces/.ssh/id_ed25519
 echo "----------Start the SSH agent in the background--------------"
 eval "$(ssh-agent -s)"
 # Add your SSH private key to the SSH agent
-ssh-add /home/coder/.ssh/id_ed25519
+ssh-add /home/codespaces/.ssh/id_ed25519
 echo "----------Copy key below and go to https://github.umn.edu/settings/ssh/new (CMD click on mac) and paste the key and give it a title--------------"
 cat ~/.ssh/id_ed25519.pub
 read -n 1 -r -s -p $'Press enter when done...\n'
@@ -62,7 +62,7 @@ if [ $dba == 'Yes' ] || [ $dba == 'yes' ] || [ $dba == 'Y' ] || [ $dba == 'y' ]
 		cd $sitename
 		echo "----------Please drag and drop the db here, then hit enter----------"
 		read dbpath
-		ddev import-db --src=$dbpath
+		ddev import-db --file=$dbpath
 		echo "----------Clearing cache----------"
 		ddev exec drush cr
 		echo "----------Uninstalling prod modules----------"
