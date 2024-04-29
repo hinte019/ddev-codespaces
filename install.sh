@@ -23,7 +23,7 @@ if [ -d "$sitename" ]
 	then
 		echo "Sitename directory already exists. Site must be installed"
 	else
-		git clone -b 9.x-prod git@github.umn.edu:drupalplatform/d8-composer.git "$sitename"
+		git clone -b 10.x-prod git@github.umn.edu:drupalplatform/d8-composer.git "$sitename"
 		cd "$sitename" || exit
 		ddev composer install
 		cd docroot/sites/ || exit
