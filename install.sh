@@ -60,13 +60,32 @@ read dba
 if [ $dba == 'Yes' ] || [ $dba == 'yes' ] || [ $dba == 'Y' ] || [ $dba == 'y' ]
 	then
 		cd $sitename
-		echo "----------Please drag and drop the db here, then hit enter----------"
-		read dbpath
-		ddev import-db --file=$dbpath
+		echo "----------Please drag and drop the db into the NEW site folder and wait, then hit enter----------"
+		read wait2
+		# check for the presence of .sql file
+		sqlfile=$(find . -maxdepth 1 -name "*.sql" -print -quit)
+		
+		# check for the presence of .sql.tar.gz file
+		sqltarfile=$(find . -maxdepth 1 -name "*.sql.gz" -print -quit)
+		
+		if [[ -n $sqlfile ]]; then
+		  # .sql file found, import it
+		  echo "Found .sql file, starting import..."
+		  ddev import-db --file=$sqlfile
+
+		elif [[ -n $sqltarfile ]]; then
+		  # .sql.tar.gz file found, unzip it and import
+		  echo "Found .sql.tar.gz file"
+		  ddev import-db --file=$sqltarfile
+		else
+		  # neither .sql nor .sql.tar.gz file found, print error message
+		  echo "Error: No .sql or .sql.tar.gz file found in the directory."
+    		  exit 1
+		fi
 		echo "----------Clearing cache----------"
 		ddev exec drush cr
 		echo "----------Uninstalling prod modules----------"
-		ddev exec drush pm-uninstall -y simplesamlphp_auth memcache acquia_purge purge
+		ddev exec drush pmu -y simplesamlphp_auth memcache acquia_purge purge
 		cd ..
 elif  [ $dba == 'No' ] || [ $dba == 'no' ] || [ $dba == 'N' ] || [ $dba == 'n' ]
 	then
