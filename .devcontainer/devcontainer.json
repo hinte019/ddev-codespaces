@@ -41,7 +41,8 @@
       "*.install": "php",
       "*.module": "php",
       "*.theme": "php",
-      "*.html": "twig"
+      "*.html": "twig",
+      "*.twig": "twig"
     },
     "emmet.includeLanguages": {
       "twig": "html"
